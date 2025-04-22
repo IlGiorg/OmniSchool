@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Conduct</title>
+</head>
+<body>
+    <h1>Student Conduct Entries</h1>
+    <div id="conductEntries">
+        <p>Loading conduct entries...</p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const studentid = params.get('studentid');
+
+            if (!studentid) {
+                document.getElementById('conductEntries').innerHTML = '<p>Invalid student ID.</p>';
+                return;
+            }
+
+            // Fetch the conduct data
+            fetch('conduct_log.json')
+                .then(response => response.json())
+                .then(data => {
+                    const studentData = data[studentid];
+                    const conductEntriesDiv = document.getElementById('conductEntries');
+
+                    // Check if the student's data exists or if the logs are empty
+                    if (!studentData || studentData.length === 0) {
+                        conductEntriesDiv.innerHTML = '<p>No behaviour logs found for this student.</p>';
+                        return;
+                    }
+
+                    // Create a table to display conduct entries
+                    let html = '<table border="1" style="width:100%; text-align:left;">';
+                    html += '<tr><th>Level</th><th>Comment</th><th>Date</th></tr>';
+
+                    studentData.forEach(entry => {
+                        html += `<tr>
+                                    <td>${entry.level}</td>
+                                    <td>${entry.comment || 'No comment provided'}</td>
+                                    <td>${entry.date || 'N/A'}</td>
+                                 </tr>`;
+                    });
+
+                    html += '</table>';
+                    conductEntriesDiv.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching conduct data:', error);
+                    document.getElementById('conductEntries').innerHTML = '<p>No behaviour logs found for this student.</p>';
+                });
+        });
+    </script>
+</body>
+</html>

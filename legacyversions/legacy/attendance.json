@@ -1,0 +1,30 @@
+[
+    {
+        "studentId": "1",
+        "studentName": "John Doe",
+        "status": "Present",
+        "date": "2024-11-22",
+        "class": "9A"
+    },
+    {
+        "studentId": "2",
+        "studentName": "Jane Smith",
+        "status": "Late",
+        "date": "2024-11-22",
+        "class": "9A"
+    },
+    {
+        "studentId": "1",
+        "studentName": "John Doe",
+        "status": "Late",
+        "date": "2024-11-23",
+        "class": "9A"
+    },
+    {
+        "studentId": "2",
+        "studentName": "Jane Smith",
+        "status": "Absent",
+        "date": "2024-11-23",
+        "class": "9A"
+    }
+]

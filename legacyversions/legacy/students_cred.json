@@ -1,0 +1,40 @@
+{
+    "students": [
+        {
+            "id": "6741a4356f2ce",
+            "username": "dsssdffsdfdsfds",
+            "password": "$2y$10$L544W0zlych0SMNx5uniaOTIHXvbMV5xAVJvBsZSpkytWx9LPQrnq",
+            "name": "dsffdsfdss"
+        },
+        {
+            "id": "a",
+            "username": "a",
+            "password": "a",
+            "name": "a"
+        },
+        {
+            "id": "6741d3070f90e",
+            "username": "PincoPallino",
+            "password": "$2y$10$j2h\/FLQk2tgXTQl5LcjtpO0wGfQiLOvT8ZhZrtT3r4Mu1D8jeh5yW",
+            "name": "Pinco"
+        },
+        {
+            "id": "6741d3d1b6fa3",
+            "username": "PincoPallino2",
+            "password": "$2y$10$cMLAS2nxBlg7tu7YylJpYuB2GuYlb7omRYwkPivd0WjPob3ofxyZS",
+            "name": "Pinco"
+        },
+        {
+            "id": "6741d56f7023e",
+            "username": "SVstu",
+            "password": "$2y$10$YqE3GqjSMI2FhtD.Vio87eFqDMsrGCM1KPhHppBaW.PEBD3BYcNCK",
+            "name": "Stefano"
+        },
+        {
+            "id": "67673ca314330",
+            "username": "example",
+            "password": "$2y$10$QNm.SwmcYCaCGndBMmRRUuwQyhoCEo.K\/SDUYdnh5HbO6VzU5YrBe",
+            "name": "Example"
+        }
+    ]
+}

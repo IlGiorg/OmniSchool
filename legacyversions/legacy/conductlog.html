@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conduct Log</title>
+</head>
+<body>
+    <h1>All Student Consequences</h1>
+    <button id="filterStudent" style="position: fixed; top: 10px; right: 10px;">Check Individual Student</button>
+    <div id="conductTable">
+        <p>Loading all consequences...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load all consequences
+            fetch('conduct_log.json')
+                .then(response => response.json())
+                .then(data => {
+                    const conductTableDiv = document.getElementById('conductTable');
+                    
+                    if (!data || data.length === 0) {
+                        conductTableDiv.innerHTML = '<p>No consequences found.</p>';
+                        return;
+                    }
+
+                    // Create a table to display all consequences
+                    let html = '<table border="1" style="width:100%; text-align:left;">';
+                    html += '<tr><th>Student ID</th><th>Level</th><th>Comment</th><th>Date</th></tr>';
+
+                    // Loop through the array of consequences
+                    data.forEach(entry => {
+                        html += `<tr>
+                                    <td>${entry.studentid}</td>
+                                    <td>${entry.level}</td>
+                                    <td>${entry.comment || 'No comment provided'}</td>
+                                    <td>${entry.timestamp || 'N/A'}</td>
+                                 </tr>`;
+                    });
+
+                    html += '</table>';
+                    conductTableDiv.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching conduct data:', error);
+                    document.getElementById('conductTable').innerHTML = '<p>An error occurred while fetching conduct data.</p>';
+                });
+        });
+
+        // Redirect to the individual student log page
+        document.getElementById('filterStudent').addEventListener('click', function() {
+            const studentid = prompt('Enter the Student ID to check their consequences:');
+            if (studentid) {
+                window.location.href = `conduct.html?studentid=${studentid}`;
+            }
+        });
+    </script>
+</body>
+</html>

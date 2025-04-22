@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OSMAP Error Codes</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1976d2;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #444;
+      border-bottom: 2px solid #1976d2;
+      padding-bottom: 5px;
+    }
+
+    ol {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    strong {
+      color: #1976d2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>OSMAP Error Codes</h1>
+
+    <section>
+      <h2>Standard HTTP Errors</h2>
+    
+        <li><strong>400:</strong> Bad Request</li>
+        <li><strong>401:</strong> Unauthenticated</li>
+        <li><strong>401-6:</strong> Unauthenticated - Missing Administrator Permissions</li>
+        <li><strong>402:</strong> Payment Required</li>
+        <li><strong>403:</strong> Forbidden</li>
+        <li><strong>404:</strong> Not Found</li>
+        <li><strong>410:</strong> Gone</li>
+        <li><strong>500:</strong> Internal Server Error</li>
+        <li><strong>501:</strong> Not Implemented</li>
+        <li><strong>503:</strong> Not Available</li>
+      
+    </section>
+
+    <section>
+      <h2>Maintenance Codes</h2>
+      
+        <li><strong>503-2:</strong> Undergoing Maintenance - No Further Information</li>
+        <li><strong>503-3:</strong> Undergoing Maintenance - Scheduled Downtime</li>
+        <li><strong>503-41:</strong> Update in progress</li>
+        <li><strong>503-42:</strong> Update to OSMAP in progress</li>
+        <li><strong>503-43:</strong> Update to server in progress</li>
+      
+    </section>
+
+    <section>
+      <h2>Feature Errors</h2>
+      
+        <li><strong>600:</strong> OSMAP Error: No Further Information</li>
+        <li><strong>601:</strong> Specific Feature Error</li>
+        <li><strong>602:</strong> Authentication Error: No Further Information</li>
+        <li><strong>603:</strong> Authentication Error: Wrong Credentials</li>
+      
+    </section>
+
+    <section>
+      <h2>Teacher Portal Errors</h2>
+      
+        <li><strong>610:</strong> Teacher Portal Error: No Further Information</li>
+        <li><strong>611:</strong> Conduct Management Error</li>
+        <li><strong>612:</strong> Error retrieving conduct data</li>
+        <li><strong>613:</strong> Error retrieving attendance data</li>
+        <li><strong>614:</strong> Error retrieving students data</li>
+      
+    </section>
+
+    <section>
+      <h2>Administration Portal Errors</h2>
+      
+        <li><strong>615:</strong> Administration Portal Error: No Further Information</li>
+        <li><strong>616:</strong> Database Error</li>
+      
+    </section>
+
+    <section>
+      <h2>Student Portal Errors</h2>
+      
+        <li><strong>620:</strong> Student Portal Error: No Further Information</li>
+        <li><strong>621:</strong> Error retrieving conduct records</li>
+        <li><strong>622:</strong> Error retrieving attendance records</li>
+        <li><strong>623:</strong> Error retrieving assignments</li>
+      
+    </section>
+    <section>
+      <h2>Other Errors</h2>
+      
+        <li><strong>700:</strong> Unknown Error</li>
+        
+      
+    </section>
+  </div>
+</body>
+</html>

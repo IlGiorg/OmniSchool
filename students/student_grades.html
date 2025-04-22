@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades</title>
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: normal;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            display: block;
+            margin: 30px auto 0 auto;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #e53935;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c62828;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="greeting">Hello, </h1>
+
+        <h2>Your Grades</h2>
+        <table id="consequenceTable">
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>Assignment</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filled by JS -->
+            </tbody>
+        </table>
+
+        <button onclick="window.close()">Close</button>
+    </div>
+
+    <script>
+        function openwindow(url) {
+            const uniqueParam = new Date().getTime();  // This creates a unique value based on the current timestamp
+            window.open(url + '?v=' + uniqueParam, '_blank', 'width=1000,height=800,toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+        }
+    </script>
+    
+    <script src="student_grades.js"></script>
+</body>
+</html>
