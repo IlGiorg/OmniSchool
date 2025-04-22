@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homework</title>
+</head>
+<body>
+    <h2>Homework Assignments</h2>
+    <table id="homework-table" border="1">
+        <thead>
+            <tr>
+                <th>Assignment</th>
+                <th>Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Homework assignments will be added here -->
+        </tbody>
+    </table>
+    <script>
+        const username = sessionStorage.getItem('student_username');
+
+        fetch('/secure/stored_data.json')
+            .then(response => response.json())
+            .then(data => {
+                const student = data.students.find(s => s.username === username);
+                if (student) {
+                    const homework = data.homework.filter(h => h.class === student.form);
+                    const tbody = document.querySelector('#homework-table tbody');
+                    if (homework.length > 0) {
+                        homework.forEach(h => {
+                            const tr = document.createElement('tr');
+                            const tdAssignment = document.createElement('td');
+                            const tdDueDate = document.createElement('td');
+                            tdAssignment.textContent = h.assignment;
+                            tdDueDate.textContent = h.due_date;
+                            tr.appendChild(tdAssignment);
+                            tr.appendChild(tdDueDate);
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        const tr = document.createElement('tr');
+                        const td = document.createElement('td');
+                        td.setAttribute('colspan', 2);
+                        td.textContent = "No homework assigned.";
+                        tr.appendChild(td);
+                        tbody.appendChild(tr);
+                    }
+                } else {
+                    alert("Student not found.");
+                }
+            });
+    </script>
+</body>
+</html>

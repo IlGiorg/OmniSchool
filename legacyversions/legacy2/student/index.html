@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+</head>
+<body>
+    <h2>Welcome, Student</h2>
+    <button onclick="viewConduct()">View Conduct</button>
+    <button onclick="viewHomework()">View Homework</button>
+    <div id="content"></div>
+    <script>
+        function viewConduct() {
+            fetch('/secure_data/stored_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    const user = data.students.find(student => student.username === 'johndoe'); // Replace with logged-in user
+                    document.getElementById('content').innerText = user.conduct;
+                });
+        }
+
+        function viewHomework() {
+            fetch('/secure_data/stored_data.json')
+                .then(response => response.json())
+                .then(data => {
+                    const user = data.students.find(student => student.username === 'johndoe'); // Replace with logged-in user
+                    const homework = data.homework.find(hw => hw.form === user.form);
+                    document.getElementById('content').innerText = homework
+                        ? `${homework.assignment} due ${homework.due_date}`
+                        : 'Good job, no homework.';
+                });
+        }
+    </script>
+</body>
+</html>
