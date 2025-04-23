@@ -8,10 +8,10 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 // DB connection
-$host = 'localhost:6070';
-$db = 'OSMAP';
-$user = 'root';
-$pass = 'root'; // Change if different in MAMP
+$host = 'sql308.infinityfree.com';
+$db = 'if0_38801093_osmap'; 
+$user = 'if0_38801093';
+$pass = 'OSMAPFreeForeve';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -21,14 +21,13 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    // Check credentials in the database
+    // Check credentials in the database (⚠️ consider hashing for production)
     $stmt = $pdo->prepare("SELECT * FROM Students WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // If the student is found, set session and return success
     if ($student) {
-        $_SESSION['username'] = $username; // ✅ Set session
+        $_SESSION['username'] = $username;
         echo json_encode(["success" => true]);
     } else {
         echo json_encode(["success" => false, "message" => "Invalid username or password."]);
