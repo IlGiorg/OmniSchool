@@ -29,7 +29,7 @@ Teachers are the core of education. OmniSchool offers a wide range of tools to s
 #### 📋 Attendance
 Teachers can select a class, take attendance, view attendance records, and **download a PDF** form list of students and their data.
 
-> 💡 **Tip**  
+> [!TIP] 
 > Print the form list for field trips when carrying a laptop might be inconvenient!
 
 #### ⚖️ Conduct
@@ -40,7 +40,7 @@ Customizable for any school’s needs — use only descriptions, adjust levels, 
 
 Positive behavior? Teachers can assign **House Points** too!
 
-> 📝 **Note**  
+> [!NOTE]
 > Don’t use Houses? Rename them to “Positive Points” in settings.
 
 #### 📝 Grades
@@ -63,7 +63,7 @@ The hub for behind-the-scenes management:
 - Execute raw SQL queries (with an extra password layer for safety)
 
 🔐 Secure by design:  
-The Admin Panel requires **two-factor authentication**, plus a **second password** for SQL commands.
+The Admin Panel requires a dedicated additional account with a different password, plus a **second password** for SQL commands.
 
 *More admin features coming soon!*
 
@@ -78,18 +78,14 @@ The Admin Panel requires **two-factor authentication**, plus a **second password
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
-
----
-
 ## 📃 License
 
-[MIT License](LICENSE)
+[CC BY-NC LICENSE](LICENSE)
 
 ---
 
 ## 🌍 Live Demo
 
 Explore the project: [https://ilgiorg.github.io/omnischool/](https://ilgiorg.github.io/omnischool/)
+>[!WARNING]
+>Due to GitHub Pages limitations the website doesn't work correctly.
