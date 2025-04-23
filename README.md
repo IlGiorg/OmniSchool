@@ -75,7 +75,7 @@ The Admin Panel requires a dedicated additional account with a different passwor
 - **Human Resources**
 - **Reception**
 - **Events Management**
-
+Check out [The To Do List](TODO.md) and the [Issues Tab](https://github.com/IlGiorg/OmniSchool/issues) for more.
 ---
 
 ## 📃 License
