@@ -2,14 +2,25 @@
 session_start();
 header('Content-Type: application/json');
 
-// Read raw input and decode JSON
+// CORS headers
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+
+// Handle preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Read JSON input
 $data = json_decode(file_get_contents("php://input"), true);
 $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
-// DB connection
+// DB config
 $host = 'sql308.infinityfree.com';
-$db = 'if0_38801093_osmap'; 
+$db = 'if0_38801093_XXX'; // Replace XXX
 $user = 'if0_38801093';
 $pass = 'OSMAPFreeForeve';
 $charset = 'utf8mb4';
@@ -21,7 +32,6 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    // Check credentials in the database (⚠️ consider hashing for production)
     $stmt = $pdo->prepare("SELECT * FROM Students WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
