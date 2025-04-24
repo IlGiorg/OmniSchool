@@ -111,7 +111,7 @@ ALTER TABLE `classes`
 --
 -- Indexes for table `conduct`
 --
-ALTER TABLE `consequences`
+ALTER TABLE `conduct`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `Student_ID` (`Student_ID`);
 
@@ -183,7 +183,7 @@ ALTER TABLE `teachers`
 -- Constraints for table `conduct`
 --
 ALTER TABLE `conduct`
-  ADD CONSTRAINT `consequences_ibfk_1` FOREIGN KEY (`Student_ID`) REFERENCES `students` (`ID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `conduct_ibfk_1` FOREIGN KEY (`Student_ID`) REFERENCES `students` (`ID`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `students`
