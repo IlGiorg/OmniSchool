@@ -72,12 +72,6 @@ INSERT INTO `classes` (`ClassID`, `Year`, `Form`) VALUES
 (13, 13, 'A'),
 (14, 13, 'B');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `conduct`
---
-
 CREATE TABLE `conduct` (
   `ID` int(11) NOT NULL,
   `Student_ID` int(11) NOT NULL,
@@ -86,12 +80,6 @@ CREATE TABLE `conduct` (
   `Date_Assigned` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-
---
--- Table structure for table `Grades`
---
-
 CREATE TABLE `grades` (
   `ID` int(11) NOT NULL,
   `Student_ID` int(11) NOT NULL,
@@ -99,14 +87,6 @@ CREATE TABLE `grades` (
   `Assignment` varchar(255) DEFAULT NULL,
   `Assessment_Date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `students`
---
 
 CREATE TABLE `students` (
   `ID` int(4) NOT NULL,
@@ -140,20 +120,9 @@ CREATE TABLE `teachers` (
   `Password` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `Teachers`
---
-
 INSERT INTO `teachers` (`TeachID`, `Username`, `Password`) VALUES
 (1, 'testteach', 'testpass');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admin`
---
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`AdminID`);
 
