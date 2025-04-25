@@ -4,8 +4,8 @@ header('Content-Type: application/json');
 
 // CORS headers
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
 
 // Handle preflight request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -19,10 +19,10 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 // DB config
-$host = 'sql308.infinityfree.com';
-$db = 'if0_38801093_XXX'; // Replace XXX
-$user = 'if0_38801093';
-$pass = 'OSMAPFreeForeve';
+$host = 'sql109.infinityfree.com';
+$db = 'if0_38817814_omnischool'; // Replace XXX
+$user = 'if0_38817814';
+$pass = 'OMNISoftware25';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
