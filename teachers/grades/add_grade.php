@@ -14,11 +14,11 @@ $type = $data['type'] ?? null;
 $reason = $data['reason'] ?? '';
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("INSERT INTO `Grades` (`Student_ID`, `Grade`, `Assignment`) VALUES (?, ?, ?);");
+    $stmt = $pdo->prepare("INSERT INTO `grades` (`Student_ID`, `Grade`, `Assignment`) VALUES (?, ?, ?);");
     $stmt->execute([$studentId, $type, $reason]);
 
     echo json_encode(["success" => true, "message" => "Grade added successfully."]);

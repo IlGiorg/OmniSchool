@@ -140,8 +140,8 @@
         <label for="reason">Assignment:</label>
         <input type="text" id="reason" name="reason" required>
 
-        <label for="assessmentDate">Assessment Date:</label>
-        <input type="date" id="assessmentDate" name="assessmentDate" required>
+        <label for="Assessment_Date">Assessment Date:</label>
+        <input type="date" id="Assessment_Date" name="Assessment_Date" required>
 
         <button type="submit">Save Grade</button>
     </form>
@@ -174,7 +174,7 @@
                 studentId: studentId,
                 type: document.getElementById("type").value,
                 reason: document.getElementById("reason").value,
-                assessmentDate: document.getElementById("assessmentDate").value
+                Assessment_Date: document.getElementById("Assessment_Date").value
             };
 
             fetch("/teachers/grades/add_grade.php", {
