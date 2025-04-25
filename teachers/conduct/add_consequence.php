@@ -14,11 +14,11 @@ $type = $data['type'] ?? null;
 $reason = $data['reason'] ?? '';
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("INSERT INTO Consequences (Student_ID, Consequence_Type, Reason) VALUES (?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO conduct (Student_ID, Consequence_Type, Reason) VALUES (?, ?, ?)");
     $stmt->execute([$studentId, $type, $reason]);
 
     echo json_encode(["success" => true, "message" => "Consequence added successfully."]);
