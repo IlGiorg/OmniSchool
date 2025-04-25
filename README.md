@@ -86,6 +86,4 @@ Check out [The To Do List](TODO.md) and the [Issues Tab](https://github.com/IlGi
 
 ## 🌍 Live Demo
 
-Explore the project: [https://ilgiorg.github.io/omnischool/](https://ilgiorg.github.io/omnischool/)
->[!WARNING]
->Due to GitHub Pages limitations the website doesn't work correctly.
+Explore the project: [omnischool.rf.gd](https://omnischool.rf.gd)
