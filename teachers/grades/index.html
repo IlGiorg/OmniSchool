@@ -23,7 +23,6 @@
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            
         }
 
         label {
@@ -35,6 +34,7 @@
 
         input[type="text"],
         input[type="number"],
+        input[type="date"],
         select {
             width: 100%;
             padding: 10px;
@@ -130,7 +130,7 @@
             <option value="7">7</option>
             <option value="6">6</option>
             <option value="5">5</option>
-            <option value="4">43</option>
+            <option value="4">4</option>
             <option value="3">3</option>
             <option value="2">2</option>
             <option value="1">1</option>
@@ -139,6 +139,9 @@
 
         <label for="reason">Assignment:</label>
         <input type="text" id="reason" name="reason" required>
+
+        <label for="assessmentDate">Assessment Date:</label>
+        <input type="date" id="assessmentDate" name="assessmentDate" required>
 
         <button type="submit">Save Grade</button>
     </form>
@@ -151,7 +154,7 @@
                 <th>Student ID</th>
                 <th>Grade</th>
                 <th>Assignment</th>
-                <th>Date</th>
+                <th>Assessment Date</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -170,7 +173,8 @@
             const data = {
                 studentId: studentId,
                 type: document.getElementById("type").value,
-                reason: document.getElementById("reason").value
+                reason: document.getElementById("reason").value,
+                assessmentDate: document.getElementById("assessmentDate").value
             };
 
             fetch("/teachers/grades/add_grade.php", {
@@ -189,7 +193,7 @@
                 loadRecords();
             })
             .catch(err => {
-                alert("Error adding consequence.");
+                alert("Error adding grade.");
                 console.error(err);
             });
         });
@@ -198,7 +202,7 @@
             const query = this.value.trim();
             if (query.length < 2) return;
 
-            fetch("../../search_students.php?q=" + encodeURIComponent(query))
+            fetch("/php/search_students.php?q=" + encodeURIComponent(query))
                 .then(res => res.json())
                 .then(data => {
                     const resultsList = document.getElementById("searchResults");
@@ -219,22 +223,25 @@
         });
 
         function loadRecords() {
-            fetch("get_consequences.php", { credentials: "include" })
+            fetch("get_grades.php", { credentials: "include" })
                 .then(res => res.json())
                 .then(data => {
                     const tbody = document.querySelector("#recordsTable tbody");
                     tbody.innerHTML = "";
-                    data.records.forEach(row => {
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = `
-                            <td>${row.ID}</td>
-                            <td>${row.Student_ID}</td>
-                            <td>${row.Grade}</td>
-                            <td>${row.Assignment}</td>
-                            <td>${row.Assessment_Date}</td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+
+                    if (data.records && Array.isArray(data.records)) {
+                        data.records.forEach(row => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${row.ID}</td>
+                                <td>${row.Student_ID}</td>
+                                <td>${row.Grade}</td>
+                                <td>${row.Assignment}</td>
+                                <td>${row.Assessment_Date}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
                 });
         }
 
