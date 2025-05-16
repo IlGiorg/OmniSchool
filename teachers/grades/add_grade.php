@@ -18,7 +18,7 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("INSERT INTO `grades` (`Student_ID`, `Grade`, `Assignment`) VALUES (?, ?, ?);");
+    $stmt = $pdo->prepare("INSERT INTO `grades` (`Student_ID`, `Grade`, `Assignment`, `Assessment_Date`) VALUES (?, ?, ?, ?);");
     $stmt->execute([$studentId, $type, $reason]);
 
     echo json_encode(["success" => true, "message" => "Grade added successfully."]);
