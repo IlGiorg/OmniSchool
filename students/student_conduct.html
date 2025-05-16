@@ -76,7 +76,12 @@
             background-color: #c62828;
         }
 
-        
+        #loading, #error {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-top: 20px;
+        }
 
         @media (max-width: 600px) {
             .container {
@@ -95,11 +100,16 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContainer">
         <h1 id="greeting">Hello, </h1>
 
         <h2>Your Consequences</h2>
-        <table id="consequenceTable">
+
+        <div id="loading">Loading your conduct data...</div>
+
+        <div id="error" style="display:none;"></div>
+
+        <table id="consequenceTable" style="display:none;">
             <thead>
                 <tr>
                     <th>Type</th>
@@ -112,9 +122,47 @@
             </tbody>
         </table>
 
-        <button onclick="window.close()">Close</button> <!-- Close button here -->
+        <button onclick="window.close()">Close</button>
     </div>
 
-    <script src="student_home.js"></script>
+    <script>
+        const loggedInUsername = localStorage.getItem("username") || "PSmith";
+
+        fetch("php/get_student_conduct.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: loggedInUsername })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const loading = document.getElementById("loading");
+            const errorDiv = document.getElementById("error");
+            loading.style.display = "none";
+
+            if (data.success) {
+                document.getElementById("greeting").textContent = "Hello, " + data.name;
+
+                const tableBody = document.querySelector("#consequenceTable tbody");
+                data.consequences.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
+                    tableBody.appendChild(tr);
+                });
+
+                document.getElementById("consequenceTable").style.display = "table";
+            } else {
+                errorDiv.textContent = "Error: " + data.message;
+                errorDiv.style.display = "block";
+            }
+        })
+        .catch(error => {
+            const loading = document.getElementById("loading");
+            const errorDiv = document.getElementById("error");
+            loading.style.display = "none";
+            errorDiv.textContent = "Something went wrong while loading your data. Please try again later.";
+            errorDiv.style.display = "block";
+            console.error("Fetch error:", error);
+        });
+    </script>
 </body>
 </html>

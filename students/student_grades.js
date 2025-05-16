@@ -1,7 +1,7 @@
 // Simulating a "logged-in" user — in a real app, use a session
 const loggedInUsername = localStorage.getItem("username") || "testuser";
 
-fetch("/get_student_grades.php", {
+fetch("/php/get_student_grades.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username: loggedInUsername })
