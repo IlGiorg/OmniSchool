@@ -3,7 +3,7 @@
 ## 🚧 To Be Implemented
 
 - [ ] Remove Conduct Records
-- [ ] Improve Attendance page and features
+- [X] Improve Attendance page and features
 - [ ] Add Homework assignment module
 - [X] Open all internal links in a new window/tab
 - [ ] Add Parents Meeting feature (scheduling, notes)

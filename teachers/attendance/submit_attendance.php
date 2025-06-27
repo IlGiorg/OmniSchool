@@ -1,5 +1,18 @@
 <?php
-include '../../db.php';
+// --- Begin integrated DB connection ---
+$host = "sql109.infinityfree.com";
+$dbname = "if0_38817814_omnischool";
+$user = "if0_38817814";
+$pass = "OMNISoftware25";
+
+$conn = new mysqli($host, $user, $pass, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+// --- End DB connection ---
+
+
 
 $classID = $_POST['classID'];
 $teacherID = 1; // replace with session ID
