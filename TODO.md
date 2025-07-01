@@ -8,6 +8,7 @@
 - [ ] Add Parents Meeting feature (scheduling, notes)
 - [ ] Display "Who gave the consequence" in conduct logs
 - [ ] "About" page
+- [ ] Make php fetch from a single config file the DB creds and info
 - [ ] Choose date for each assessment when grading
 - [ ] Accounting
 - [ ] HR
