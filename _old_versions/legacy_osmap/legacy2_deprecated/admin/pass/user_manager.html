@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manager</title>
+</head>
+<body>
+    <h2>Manage Admin Users</h2>
+    <form id="user-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <button type="button" onclick="addAdmin()">Add Admin</button>
+    </form>
+    <script>
+        function addAdmin() {
+            const admin = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            fetch('/secure/admins.json')
+                .then(response => response.json())
+                .then(data => {
+                    data.admins.push(admin);
+
+                    fetch('/secure/admins.json', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    }).then(() => alert('Admin user added successfully.'));
+                });
+        }
+    </script>
+</body>
+</html>

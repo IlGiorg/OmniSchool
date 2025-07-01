@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Conduct</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        #searchResults {
+            margin-top: 6px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #searchResults li {
+            padding: 8px 12px;
+            transition: background 0.2s;
+        }
+
+        #searchResults li:hover {
+            background-color: #f0f0f0;
+        }
+
+        button[type="submit"] {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 90%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        thead {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 700px) {
+            form, table {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Grades Management</h1>
+
+    <form id="consequenceForm">
+        <label for="studentSearch">Search Student:</label>
+        <input type="text" id="studentSearch" placeholder="Enter name or surname" autocomplete="off" required>
+        <ul id="searchResults"></ul>
+
+        <input type="hidden" id="studentId" name="studentId" required>
+
+        <label for="type">Grade:</label>
+        <select id="type" name="type" required>
+            <option value="10">10</option>
+            <option value="9">9</option>
+            <option value="8">8</option>
+            <option value="7">7</option>
+            <option value="6">6</option>
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+            <option value="0">0</option>
+        </select>
+
+        <label for="reason">Assignment:</label>
+        <input type="text" id="reason" name="reason" required>
+
+        <label for="Assessment_Date">Assessment Date:</label>
+        <input type="date" id="Assessment_Date" name="Assessment_Date" required>
+
+        <button type="submit">Save Grade</button>
+    </form>
+
+    <h2>All Grades</h2>
+    <table border="0" id="recordsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student ID</th>
+                <th>Grade</th>
+                <th>Assignment</th>
+                <th>Assessment Date</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        document.getElementById("consequenceForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const studentId = document.getElementById("studentId").value;
+            if (!studentId) {
+                alert("Please select a student from the search results.");
+                return;
+            }
+
+            const data = {
+                studentId: studentId,
+                type: document.getElementById("type").value,
+                reason: document.getElementById("reason").value,
+                Assessment_Date: document.getElementById("Assessment_Date").value
+            };
+
+            fetch("/teachers/grades/add_grade.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(result => {
+                alert(result.message);
+                document.getElementById("consequenceForm").reset();
+                document.getElementById("studentId").value = "";
+                loadRecords();
+            })
+            .catch(err => {
+                alert("Error adding grade.");
+                console.error(err);
+            });
+        });
+
+        document.getElementById("studentSearch").addEventListener("input", function () {
+            const query = this.value.trim();
+            if (query.length < 2) return;
+
+            fetch("/php/search_students.php?q=" + encodeURIComponent(query))
+                .then(res => res.json())
+                .then(data => {
+                    const resultsList = document.getElementById("searchResults");
+                    resultsList.innerHTML = "";
+
+                    data.forEach(student => {
+                        const li = document.createElement("li");
+                        li.textContent = `${student.First_name} ${student.Last_Name} (ID: ${student.ID})`;
+                        li.style.cursor = "pointer";
+                        li.onclick = () => {
+                            document.getElementById("studentId").value = student.ID;
+                            document.getElementById("studentSearch").value = `${student.First_name} ${student.Last_Name}`;
+                            resultsList.innerHTML = "";
+                        };
+                        resultsList.appendChild(li);
+                    });
+                });
+        });
+
+        function loadRecords() {
+            fetch("get_grades.php", { credentials: "include" })
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.querySelector("#recordsTable tbody");
+                    tbody.innerHTML = "";
+
+                    if (data.records && Array.isArray(data.records)) {
+                        data.records.forEach(row => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${row.ID}</td>
+                                <td>${row.Student_ID}</td>
+                                <td>${row.Grade}</td>
+                                <td>${row.Assignment}</td>
+                                <td>${row.Assessment_Date}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                });
+        }
+
+        window.onload = loadRecords;
+    </script>
+</body>
+</html>

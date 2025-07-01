@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSMAP | Conduct</title>
+</head>
+<body>
+    <h1>OSMAP Conduct Manager</h1>
+    <form id="teacherForm">
+        <label for="level">Select Level:</label>
+        <select id="level" name="level">
+            <option value="L0">L0</option>
+            <option value="L1">L1</option>
+            <option value="L2">L2</option>
+            <option value="L3">L3</option>
+            <option value="L4">L4</option>
+            <option value="L5">L5</option>
+            <option value="HP">Housepoint</option>
+        </select>
+        <br><br>
+        <label for="studentid">Select Student:</label>
+        <select id="studentid" name="studentid" required>
+            <option value="">Select a student</option>
+        </select>
+        <br><br>
+        <label for="comment">Add a Comment:</label>
+        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <button id="checkAllConsequences" style="position: fixed; bottom: 60px; right: 10px;">Check All Consequences</button>
+
+    <script>
+        document.getElementById('checkAllConsequences').addEventListener('click', function() {
+            window.location.href = 'conductlog.html';
+        });
+    </script>
+    
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Populate the student dropdown
+    fetch('students_cred.json')
+        .then(response => response.json())
+        .then(data => {
+            const students = data.students; // Access the "students" key
+            const studentSelect = document.getElementById('studentid');
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.username;
+                option.textContent = student.name || student.username; // Display the name or username
+                studentSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching student credentials:', error);
+            alert("An error occurred while fetching student credentials.");
+        });
+});
+
+
+        document.getElementById('teacherForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const level = document.getElementById('level').value;
+            const studentid = document.getElementById('studentid').value;
+            const comment = document.getElementById('comment').value.trim();
+
+            if (level && studentid) {
+                fetch('update_conduct.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ studentid: studentid, level: level, comment: comment })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Conduct level updated successfully!');
+                    } else {
+                        alert('Failed to update conduct level.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred.');
+                });
+            } else {
+                alert('Please fill in all the fields.');
+            }
+        });
+    </script>
+</body>
+</html>

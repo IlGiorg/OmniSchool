@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .button-group {
+            margin-bottom: 20px;
+            display: flex; /* Display buttons in a row */
+            justify-content: space-between; /* Distribute buttons evenly */
+            gap: 10px; /* Add space between buttons */
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #515151;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 5s ease;
+            flex-grow: 1; /* Make buttons take equal width */
+        }
+
+        .logout {
+            background-color: #ff0000;
+            color: #ffffff;
+        }
+
+        button:hover {
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .studentsdb {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 25px;
+            font-size: 14px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        }
+
+        .admin-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 25px;
+            font-size: 14px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+        }
+        .disabled{
+            cursor:not-allowed;
+            
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="greeting">Hello, </h1>
+
+        <div class="button-group">
+            <button onclick="openwindow('student_conduct.html')">Conduct</button>
+            <button onclick="openwindow('student_grades.html')">Grades</button>
+            <button onclick="openwindow('stattendance.php')">Attendance</button>
+            <button class="logout" onclick="window.location.href='/logout.php'">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        function openwindow(url) {
+            const uniqueParam = new Date().getTime();  // This creates a unique value based on the current timestamp
+            window.open(url + '?v=' + uniqueParam, '_blank', 'width=1000,height=800,toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+        }
+    </script>
+    
+
+    <script src="student_home.js"></script>
+</body>
+</html>

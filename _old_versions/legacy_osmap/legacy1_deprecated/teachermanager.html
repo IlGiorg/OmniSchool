@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Teacher Manager</title>
+</head>
+<body>
+    <h1>Teacher Manager</h1>
+
+    <form id="createTeacherForm">
+        <label for="teacherUsername">Teacher Username:</label>
+        <input type="text" id="teacherUsername" name="teacherUsername" required>
+        <br><br>
+        
+        <label for="teacherPassword">Password:</label>
+        <input type="password" id="teacherPassword" name="teacherPassword" required>
+        <br><br>
+
+        <button type="submit">Create Teacher</button>
+    </form>
+
+    <h2>Existing Teachers</h2>
+    <ul id="teacherList">
+        <!-- List of teachers will be populated here -->
+    </ul>
+
+    <script>
+        document.getElementById('createTeacherForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const teacherUsername = document.getElementById('teacherUsername').value;
+            const teacherPassword = document.getElementById('teacherPassword').value;
+
+            // Create teacher data (this could be a POST request to a server)
+            const newTeacher = { username: teacherUsername, password: teacherPassword };
+
+            fetch('save_teacher.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newTeacher)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Teacher created successfully!');
+                    loadTeachers();  // Refresh the teacher list
+                } else {
+                    alert('Failed to create teacher.');
+                }
+            })
+            .catch(error => {
+                console.error('Error creating teacher:', error);
+                alert('An error occurred.');
+            });
+        });
+
+        // Load teachers list
+        function loadTeachers() {
+            fetch('teachers_cred.json')
+                .then(response => response.json())
+                .then(data => {
+                    const teacherList = document.getElementById('teacherList');
+                    teacherList.innerHTML = '';
+                    data.forEach(teacher => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = teacher.username;
+                        teacherList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading teachers:', error);
+                    alert('An error occurred while loading teachers.');
+                });
+        }
+
+        // Load teachers when the page is loaded
+        loadTeachers();
+    </script>
+</body>
+</html>

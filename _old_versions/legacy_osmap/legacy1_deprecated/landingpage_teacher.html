@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSMAP | Teacher</title>
+    <style>
+        /* Left-aligning the content */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Center the container horizontally */
+            align-items: center; /* Center the container vertically */
+            height: 100vh; /* Full viewport height */
+        }
+        .container {
+            margin-left: 20px; /* Adjust the left margin as needed */
+            text-align: center; /* Center the text */
+        }
+        .p1 {
+            font-family: "Sans-Serif", Arial, serif;
+        }
+        .p2 {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .p3 {
+            font-family: "Lucida Console", "Courier New", monospace;
+        }
+        .button {
+            margin: 10px 0; /* Vertical margin between buttons */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 200px; /* Fixed width for consistency */
+        }
+        .button-attendance {
+            background-color: #0ac300;
+            color: #fff;
+        }
+        .button-rewmgmt {
+            background-color: #0010c3;
+            color: #fff;
+        }
+        .button-conductmgmt {
+            background-color: #ff0033;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OSMAP</h1>
+        <h3 class="p1">Choose an action:</h3>
+        <button class="button button-attendance" onclick="window.location.href='attendance.html'">Attendance</button>
+        <button class="button button-rewmgmt" onclick="window.location.href='rewardslanding.html'">Reward Manager</button>
+        <button class="button button-conductmgmt" onclick="window.location.href='conductlanding.html'">Conduct Manager</button>
+        <button id="adminButton" style="display: none;" onclick="window.location.href='administration.html'">Administration</button>
+    </div>
+            <script>
+            // Simulate a login check for the 'admin' user
+            const loggedInUser = 'admin'; // This should come from your actual authentication system
+    
+            if (loggedInUser === 'admin') {
+                document.getElementById('adminButton').style.display = 'block';
+            }
+        </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var sessionId = sessionStorage.getItem('sessionId');
+            if (!sessionId) {
+                alert('You are not authorized to access this page. Redirecting to session error page.');
+                window.location.href = 'sessionerror.html'; // Redirect to the session error page
+            }
+        });
+    </script>
+</body>
+</html>

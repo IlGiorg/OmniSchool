@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Conduct Report</title>
+</head>
+<body>
+    <h1>Print Conduct Report</h1>
+    <form id="printForm">
+        <label for="studentSelect">Select Student:</label>
+        <select id="studentSelect" name="studentSelect" required>
+            <option value="">Select a student</option>
+        </select>
+        <br><br>
+        <button type="submit">Download Report</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch the student list
+            fetch('students_cred.json')
+                .then(response => response.json())
+                .then(data => {
+                    const studentSelect = document.getElementById('studentSelect');
+                    data.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.username;
+                        option.textContent = student.username;
+                        studentSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching student list:', error);
+                });
+
+            // Handle form submission
+            document.getElementById('printForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const student = document.getElementById('studentSelect').value;
+                if (!student) {
+                    alert('Please select a student.');
+                    return;
+                }
+
+                fetch(`generate_pdf.php?student=${encodeURIComponent(student)}`)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = `${student}_Conduct_Report.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Error generating report:', error);
+                        alert('An error occurred while generating the report.');
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

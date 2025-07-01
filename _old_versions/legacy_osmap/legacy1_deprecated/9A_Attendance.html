@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Attendance</title>
+</head>
+<body>
+    <h1>Attendance for Class 9A</h1>
+    <div id="attendanceContainer">
+        <p>Loading student data...</p>
+    </div>
+    <button id="saveAttendance" style="margin-top: 20px;">Save Attendance</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const attendanceContainer = document.getElementById('attendanceContainer');
+            const saveAttendanceButton = document.getElementById('saveAttendance');
+
+            // Fetch the student data for the class (use '9A.json' for class 9A)
+            fetch('9A.json')
+                .then(response => response.json())
+                .then(students => {
+                    if (!students || students.length === 0) {
+                        attendanceContainer.innerHTML = '<p>No students found in this class.</p>';
+                        return;
+                    }
+
+                    // Create a table for attendance
+                    let html = '<table border="1" style="width:100%; text-align:left;">';
+                    html += '<tr><th>Name</th><th>Academic House</th><th>DOB</th><th>Status</th></tr>';
+
+                    students.forEach(student => {
+                        html += `<tr>
+                                    <td>${student.name} ${student.surname}</td>
+                                    <td>${student.academicHouse}</td>
+                                    <td>${student.dob}</td>
+                                    <td>
+                                        <select data-student="${student.id}" class="attendanceSelect">
+                                            <option value="Present">Present</option>
+                                            <option value="Absent">Absent</option>
+                                            <option value="Late">Late</option>
+                                        </select>
+                                    </td>
+                                 </tr>`;
+                    });
+
+                    html += '</table>';
+                    attendanceContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching student data:', error);
+                    attendanceContainer.innerHTML = '<p>An error occurred while loading student data.</p>';
+                });
+
+            // Handle saving attendance when button is clicked
+            saveAttendanceButton.addEventListener('click', function () {
+                const attendanceRecords = [];
+
+                // Collect all attendance information from the table
+                const attendanceSelects = document.querySelectorAll('.attendanceSelect');
+                attendanceSelects.forEach(select => {
+                    const studentId = select.getAttribute('data-student');
+                    const studentName = select.closest('tr').querySelector('td').textContent.trim(); // Get the student's name from the row
+                    const status = select.value;
+                    const date = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
+
+                    attendanceRecords.push({ studentId, studentName, status, date });
+                });
+
+                // Send the data to the server to save it
+                fetch('save_attendance.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        class: '9A', // Replace with dynamic class if necessary
+                        attendanceRecords: attendanceRecords
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Attendance saved successfully!');
+                    } else {
+                        alert('An error occurred while saving attendance.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while saving attendance.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
