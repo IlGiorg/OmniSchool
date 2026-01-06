@@ -24,15 +24,15 @@ try {
         exit;
     }
 
-    // Get consequences
+    // Get grades
     $stmt = $pdo->prepare("SELECT Consequence_Type, Reason, Date_Assigned FROM conduct WHERE Student_ID = ?");
     $stmt->execute([$student['ID']]);
-    $consequences = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $grades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
         "success" => true,
         "name" => $student["First_name"],
-        "consequences" => $consequences
+        "grades" => $grades
     ]);
 
 } catch (PDOException $e) {

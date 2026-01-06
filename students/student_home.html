@@ -75,6 +75,8 @@
             <button onclick="openwindow('student_conduct.html')">Conduct</button>
             <button onclick="openwindow('student_grades.html')">Grades</button>
             <button onclick="openwindow('stattendance.php')">Attendance</button>
+            <button onclick="openwindow('studenthw.php')">Homework</button>
+            <button onclick="openwindow('announcements.php')">Announcements</button>
             <button class="logout" onclick="window.location.href='/logout.php'">Logout</button>
         </div>
     </div>
@@ -87,6 +89,30 @@
     </script>
     
 
-    <script src="student_home.js"></script>
+    <script>
+const loggedInUsername = localStorage.getItem("username") || "testuser";
+
+fetch("/php/get_student_data.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: loggedInUsername })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        document.getElementById("greeting").textContent = "Hello, " + data.name;
+
+        const tableBody = document.querySelector("#consequenceTable tbody");
+        data.consequences.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
+            tableBody.appendChild(tr);
+        });
+    } else {
+        document.body.innerHTML = `<p>Error: ${data.message}</p>`;
+    }
+});
+
+    </script>
 </body>
 </html>

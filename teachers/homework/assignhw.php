@@ -1,12 +1,4 @@
 <?php
-session_start();
-
-// Require teacher to be logged in
-if (!isset($_SESSION['username'])) {
-    echo "<p>Unauthorized. Please log in as a teacher.</p>";
-    exit;
-}
-
 $successMessage = "";
 $errorMessage = "";
 
@@ -14,19 +6,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'] ?? '';
     $duedate = $_POST['duedate'] ?? '';
     $class = $_POST['class'] ?? '';
-    $assignedby = $_SESSION['username']; // logged-in teacher
+    $assignedby = $_POST['assignedby'] ?? '';
 
-    try {
-        $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
+    if (empty($description) || empty($duedate) || empty($class) || empty($assignedby)) {
+        $errorMessage = "❌ All fields are required.";
+    } else {
+        try {
+            $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
 
-        $stmt = $pdo->prepare("INSERT INTO homework (description, duedate, class, assignedby) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$description, $duedate, $class, $assignedby]);
+            $stmt = $pdo->prepare("INSERT INTO homework (description, duedate, class, assignedby) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$description, $duedate, $class, $assignedby]);
 
-        $successMessage = "✅ Homework assigned successfully!";
-    } catch (PDOException $e) {
-        $errorMessage = "❌ Error: " . $e->getMessage();
+            $successMessage = "✅ Homework assigned successfully!";
+        } catch (PDOException $e) {
+            $errorMessage = "❌ Database error: " . $e->getMessage();
+        }
     }
 }
 ?>
@@ -64,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             gap: 16px;
         }
 
-        input, textarea, select {
+        input, textarea {
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -115,8 +111,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="class">Class</label>
         <input type="text" id="class" name="class" placeholder="e.g., 10A or 9B" required>
 
-        <label>Assigned By</label>
-        <input type="text" value="<?= htmlspecialchars($_SESSION['username']) ?>" disabled>
+        <label for="assignedby">Your Teacher Username</label>
+        <input type="text" id="assignedby" name="assignedby" placeholder="Enter your username" required>
 
         <button type="submit">Assign Homework</button>
     </form>

@@ -8,14 +8,14 @@ if (!isset($_SESSION['username'])) {
 }
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
     $username = $_SESSION['username'];
 
     // Get student
-    $stmt = $pdo->prepare("SELECT ID, First_name FROM Students WHERE Username = ?");
+    $stmt = $pdo->prepare("SELECT ID, First_name FROM students WHERE Username = ?");
     $stmt->execute([$username]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -25,7 +25,7 @@ try {
     }
 
     // Get grades
-    $stmt = $pdo->prepare("SELECT Grade, Assignment, Assessment_Date FROM Grades WHERE Student_ID = ?");
+    $stmt = $pdo->prepare("SELECT Grade, Assignment, Assessment_Date FROM grades WHERE Student_ID = ?");
     $stmt->execute([$student['ID']]);
     $grades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

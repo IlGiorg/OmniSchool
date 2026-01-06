@@ -8,10 +8,10 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 // DB connection
-$host = 'localhost';
-$db = 'OSMAP';
-$user = 'root';
-$pass = 'root'; // Change if different in MAMP
+$host = 'sql109.infinityfree.com';
+$db = 'if0_38817814_omnischool';
+$user = 'if0_38817814';
+$pass = 'OMNISoftware25'; // Change if different in MAMP
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

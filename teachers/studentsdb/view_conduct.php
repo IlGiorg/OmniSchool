@@ -7,10 +7,10 @@ error_reporting(E_ALL);
 session_start();
 
 // Database connection details
-$host = 'localhost';
-$db = 'OSMAP';
-$user = 'root';
-$pass = 'root'; // MAMP default
+$host = 'sql109.infinityfree.com';
+$db = 'if0_38817814_omnischool';
+$user = 'if0_38817814';
+$pass = 'OMNISoftware25';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -31,8 +31,22 @@ if (!is_numeric($studentID)) {
     exit;
 }
 
+// Handle delete request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $deleteId = $_POST['delete_id'];
+    if (is_numeric($deleteId)) {
+        $deleteQuery = "DELETE FROM conduct WHERE ID = :id";
+        $stmtDelete = $pdo->prepare($deleteQuery);
+        $stmtDelete->bindParam(':id', $deleteId, PDO::PARAM_INT);
+        $stmtDelete->execute();
+        // Redirect to prevent resubmission on refresh
+        header("Location: view_conduct.php?studentID=" . urlencode($studentID));
+        exit;
+    }
+}
+
 // Fetch conduct records for the student
-$query = "SELECT * FROM Consequences WHERE Student_ID = :studentID ORDER BY Date_Assigned DESC";
+$query = "SELECT * FROM conduct WHERE Student_ID = :studentID ORDER BY Date_Assigned DESC";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':studentID', $studentID, PDO::PARAM_INT);
 $stmt->execute();
@@ -85,7 +99,26 @@ $noRecords = empty($conductRecords);
             font-size: 0.9em;
             color: #555;
         }
+        form {
+            display: inline;
+        }
+        button.delete-btn {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.delete-btn:hover {
+            background-color: #c62828;
+        }
     </style>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this conduct record?');
+        }
+    </script>
 </head>
 <body>
 
@@ -100,6 +133,7 @@ $noRecords = empty($conductRecords);
                     <th>Type</th>
                     <th>Reason</th>
                     <th>Date Assigned</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,6 +142,12 @@ $noRecords = empty($conductRecords);
                         <td><?php echo htmlspecialchars($record['Consequence_Type']); ?></td>
                         <td><?php echo htmlspecialchars($record['Reason']); ?></td>
                         <td><?php echo htmlspecialchars(date("Y-m-d H:i", strtotime($record['Date_Assigned']))); ?></td>
+                        <td>
+                            <form method="POST" onsubmit="return confirmDelete();">
+                                <input type="hidden" name="delete_id" value="<?php echo $record['ID']; ?>">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

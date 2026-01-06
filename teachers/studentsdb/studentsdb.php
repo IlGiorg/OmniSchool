@@ -7,12 +7,13 @@ error_reporting(E_ALL);
 session_start();
 
 // Database connection details
-$host = 'localhost';
-$db = 'OSMAP';
-$user = 'root';
-$pass = 'root'; // Change if different in MAMP
+$host = 'sql109.infinityfree.com';
+$db = 'if0_38817814_omnischool';
+$user = 'if0_38817814';
+$pass = 'OMNISoftware25'; // Change if different in MAMP
 $charset = 'utf8mb4';
 
+// Missing DSN
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
 // Create a PDO instance
@@ -22,6 +23,7 @@ try {
 } catch (PDOException $e) {
     die("Could not connect to the database $db :" . $e->getMessage());
 }
+
 
 // Check if a search term was entered
 if (!empty($_GET['searchTerm'])) {
@@ -133,16 +135,19 @@ if (!empty($_GET['searchTerm'])) {
             <?php if (count($students) > 0): ?>
                 <?php foreach ($students as $student): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($student['First_name']); ?></td>
-                        <td><?php echo htmlspecialchars($student['Last_Name']); ?></td>
-                        <td><?php echo htmlspecialchars($student['Username']); ?></td>
-                        <td><?php echo htmlspecialchars($student['DOB']); ?></td>
-                        <td><?php echo htmlspecialchars($student['Academic_House']); ?></td>
-                        <td><?php echo htmlspecialchars($student['ClassID']); ?></td>
-                        <td>
-                            <a href="view_conduct.php?studentID=<?php echo urlencode($student['ID']); ?>">
-                                <button class="view-conduct-btn">View Conduct</button>
-                            </a>
+                        <td><?php echo htmlspecialchars($student['First_name'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($student['Last_Name'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($student['Username'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($student['DOB'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($student['Academic_House'] ?? ''); ?></td>
+                        <td><?php echo htmlspecialchars($student['ClassID'] ?? ''); ?></td>
+
+                            <td>
+    <a href="view_conduct.php?studentID=<?php echo urlencode($student['ID']); ?>" target="_blank">
+        <button class="view-conduct-btn">View Conduct</button>
+    </a>
+</td>
+
                         </td>
                     </tr>
                 <?php endforeach; ?>

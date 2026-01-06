@@ -7,11 +7,11 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("SELECT * FROM Teachers WHERE Username = ? AND Password = ?");
+    $stmt = $pdo->prepare("SELECT * FROM teachers WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]);
     $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
 

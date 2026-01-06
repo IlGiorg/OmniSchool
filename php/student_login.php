@@ -32,7 +32,7 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("SELECT * FROM Students WHERE Username = ? AND Password = ?");
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 

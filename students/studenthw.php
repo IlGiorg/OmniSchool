@@ -1,128 +1,60 @@
 <?php
-session_start();
+// Connessione al database
+$host = 'localhost';
+$db = 'omni';
+$user = 'your_db_user';
+$pass = 'your_db_password';
 
-if (!isset($_SESSION['username'])) {
-    echo "<p>Unauthorized. Please log in as a student.</p>";
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Connessione fallita: " . $conn->connect_error);
+}
+
+// Username dello studente (può venire da sessione o parametro GET/POST)
+$username = $_GET['username']; // Assicurati di sanitizzare se viene da input utente
+
+// Query per ottenere la classe dello studente
+$stmt = $conn->prepare("
+    SELECT Class_ID 
+    FROM students 
+    WHERE Username = ?
+");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "Studente non trovato.";
     exit;
 }
 
-$homeworkList = [];
-$className = "";
-$studentName = "";
+$row = $result->fetch_assoc();
+$class_id = $row['Class_ID'];
 
-try {
-    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
+// Ora otteniamo i compiti per quella classe
+$stmt = $conn->prepare("
+    SELECT subject, title, due_date 
+    FROM homework 
+    WHERE ClassID = ?
+    ORDER BY due_date ASC
+");
+$stmt->bind_param("s", $class_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    // Get student class info
-    $username = $_SESSION['username'];
-    $stmt = $pdo->prepare("SELECT First_name, Class_ID FROM students WHERE Username = ?");
-    $stmt->execute([$username]);
-    $student = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$student) {
-        echo "<p>Student not found.</p>";
-        exit;
+// Mostriamo i compiti
+if ($result->num_rows > 0) {
+    echo "<h2>Compiti per la tua classe</h2>";
+    echo "<ul>";
+    while ($hw = $result->fetch_assoc()) {
+        echo "<li><strong>" . htmlspecialchars($hw['subject']) . "</strong>: " 
+           . htmlspecialchars($hw['title']) 
+           . " (scadenza: " . htmlspecialchars($hw['due_date']) . ")</li>";
     }
-
-    $className = $student['Class'];
-    $studentName = $student['First_name'];
-
-    // Get homework for that class
-    $stmt = $pdo->prepare("SELECT * FROM homework WHERE class = ? ORDER BY duedate ASC");
-    $stmt->execute([$className]);
-    $homeworkList = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    echo "<pre>" . $e->getMessage() . "</pre>";
-    exit;
+    echo "</ul>";
+} else {
+    echo "Nessun compito assegnato per la tua classe.";
 }
+
+$conn->close();
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Your Homework</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f1f8e9;
-            margin: 0;
-            padding: 40px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
-            background: #fff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
-            text-align: center;
-            color: #388e3c;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-        }
-
-        th, td {
-            padding: 14px;
-            border-bottom: 1px solid #c8e6c9;
-            text-align: center;
-        }
-
-        th {
-            background-color: #388e3c;
-            color: white;
-        }
-
-        tr:hover {
-            background-color: #e8f5e9;
-        }
-
-        .no-homework {
-            text-align: center;
-            padding: 20px;
-            font-style: italic;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Hello, <?= htmlspecialchars($studentName) ?> 👋</h1>
-    <h2>Your Class: <?= htmlspecialchars($className) ?></h2>
-    <h2>Assigned Homework</h2>
-
-    <?php if (count($homeworkList) === 0): ?>
-        <p class="no-homework">🎉 No homework has been assigned to your class yet.</p>
-    <?php else: ?>
-        <table>
-            <thead>
-            <tr>
-                <th>Description</th>
-                <th>Due Date</th>
-                <th>Assigned By</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($homeworkList as $hw): ?>
-                <tr>
-                    <td><?= htmlspecialchars($hw['description']) ?></td>
-                    <td><?= htmlspecialchars($hw['duedate']) ?></td>
-                    <td><?= htmlspecialchars($hw['assignedby']) ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php endif; ?>
-</div>
-</body>
-</html>

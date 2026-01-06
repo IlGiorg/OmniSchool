@@ -4,7 +4,7 @@ document.getElementById("teacherLoginForm").addEventListener("submit", function 
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    fetch("/teacher_login.php", {
+    fetch("/php/teacher_login.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -15,7 +15,7 @@ document.getElementById("teacherLoginForm").addEventListener("submit", function 
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = "/teachers/teacher_home.html";
+            window.location.href = "/teachers/teacher_home.php";
         } else {
             document.getElementById("errorMessage").innerText = data.message;
         }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Home</title>
+    <title>Student Conduct</title>
     <style>
         :root {
             --primary-color: #1976d2;
@@ -76,12 +76,7 @@
             background-color: #c62828;
         }
 
-        #loading, #error {
-            text-align: center;
-            font-size: 18px;
-            color: #666;
-            margin-top: 20px;
-        }
+        
 
         @media (max-width: 600px) {
             .container {
@@ -100,16 +95,11 @@
     </style>
 </head>
 <body>
-    <div class="container" id="mainContainer">
+    <div class="container">
         <h1 id="greeting">Hello, </h1>
 
         <h2>Your Consequences</h2>
-
-        <div id="loading">Loading your conduct data...</div>
-
-        <div id="error" style="display:none;"></div>
-
-        <table id="consequenceTable" style="display:none;">
+        <table id="consequenceTable">
             <thead>
                 <tr>
                     <th>Type</th>
@@ -122,47 +112,32 @@
             </tbody>
         </table>
 
-        <button onclick="window.close()">Close</button>
+        <button onclick="window.close()">Close</button> <!-- Close button here -->
     </div>
 
-    <script>
-        const loggedInUsername = localStorage.getItem("username") || "PSmith";
+    <script>// Simulating a "logged-in" user — in a real app, use a session
+const loggedInUsername = localStorage.getItem("username") || "PSmith";
 
-        fetch("php/get_student_conduct.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: loggedInUsername })
-        })
-        .then(response => response.json())
-        .then(data => {
-            const loading = document.getElementById("loading");
-            const errorDiv = document.getElementById("error");
-            loading.style.display = "none";
+fetch("/php/get_student_conduct.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: loggedInUsername })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        document.getElementById("greeting").textContent = "Hello, " + data.name;
 
-            if (data.success) {
-                document.getElementById("greeting").textContent = "Hello, " + data.name;
-
-                const tableBody = document.querySelector("#consequenceTable tbody");
-                data.consequences.forEach(row => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
-                    tableBody.appendChild(tr);
-                });
-
-                document.getElementById("consequenceTable").style.display = "table";
-            } else {
-                errorDiv.textContent = "Error: " + data.message;
-                errorDiv.style.display = "block";
-            }
-        })
-        .catch(error => {
-            const loading = document.getElementById("loading");
-            const errorDiv = document.getElementById("error");
-            loading.style.display = "none";
-            errorDiv.textContent = "Something went wrong while loading your data. Please try again later.";
-            errorDiv.style.display = "block";
-            console.error("Fetch error:", error);
+        const tableBody = document.querySelector("#consequenceTable tbody");
+        data.consequences.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
+            tableBody.appendChild(tr);
         });
-    </script>
+    } else {
+        document.body.innerHTML = `<p>Error: ${data.message}</p>`;
+    }
+});
+</script>
 </body>
 </html>

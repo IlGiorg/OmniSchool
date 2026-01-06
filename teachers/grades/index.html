@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Conduct</title>
+    <title>Manage Grades</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -115,7 +115,7 @@
 <body>
     <h1>Grades Management</h1>
 
-    <form id="consequenceForm">
+    <form id="gradeForm">
         <label for="studentSearch">Search Student:</label>
         <input type="text" id="studentSearch" placeholder="Enter name or surname" autocomplete="off" required>
         <ul id="searchResults"></ul>
@@ -152,6 +152,7 @@
             <tr>
                 <th>ID</th>
                 <th>Student ID</th>
+                <th>Student</th>
                 <th>Grade</th>
                 <th>Assignment</th>
                 <th>Assessment Date</th>
@@ -160,92 +161,95 @@
         <tbody></tbody>
     </table>
 
-    <script>
-        document.getElementById("consequenceForm").addEventListener("submit", function (e) {
-            e.preventDefault();
+<script>
+    document.getElementById("gradeForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-            const studentId = document.getElementById("studentId").value;
-            if (!studentId) {
-                alert("Please select a student from the search results.");
-                return;
-            }
-
-            const data = {
-                studentId: studentId,
-                type: document.getElementById("type").value,
-                reason: document.getElementById("reason").value,
-                Assessment_Date: document.getElementById("Assessment_Date").value
-            };
-
-            fetch("/teachers/grades/add_grade.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(result => {
-                alert(result.message);
-                document.getElementById("consequenceForm").reset();
-                document.getElementById("studentId").value = "";
-                loadRecords();
-            })
-            .catch(err => {
-                alert("Error adding grade.");
-                console.error(err);
-            });
-        });
-
-        document.getElementById("studentSearch").addEventListener("input", function () {
-            const query = this.value.trim();
-            if (query.length < 2) return;
-
-            fetch("/php/search_students.php?q=" + encodeURIComponent(query))
-                .then(res => res.json())
-                .then(data => {
-                    const resultsList = document.getElementById("searchResults");
-                    resultsList.innerHTML = "";
-
-                    data.forEach(student => {
-                        const li = document.createElement("li");
-                        li.textContent = `${student.First_name} ${student.Last_Name} (ID: ${student.ID})`;
-                        li.style.cursor = "pointer";
-                        li.onclick = () => {
-                            document.getElementById("studentId").value = student.ID;
-                            document.getElementById("studentSearch").value = `${student.First_name} ${student.Last_Name}`;
-                            resultsList.innerHTML = "";
-                        };
-                        resultsList.appendChild(li);
-                    });
-                });
-        });
-
-        function loadRecords() {
-            fetch("get_grades.php", { credentials: "include" })
-                .then(res => res.json())
-                .then(data => {
-                    const tbody = document.querySelector("#recordsTable tbody");
-                    tbody.innerHTML = "";
-
-                    if (data.records && Array.isArray(data.records)) {
-                        data.records.forEach(row => {
-                            const tr = document.createElement("tr");
-                            tr.innerHTML = `
-                                <td>${row.ID}</td>
-                                <td>${row.Student_ID}</td>
-                                <td>${row.Grade}</td>
-                                <td>${row.Assignment}</td>
-                                <td>${row.Assessment_Date}</td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-                    }
-                });
+        const studentId = document.getElementById("studentId").value;
+        if (!studentId) {
+            alert("Please select a student from the search results.");
+            return;
         }
 
-        window.onload = loadRecords;
-    </script>
+        const data = {
+            studentId: studentId,
+            type: document.getElementById("type").value,
+            reason: document.getElementById("reason").value,
+            Assessment_Date: document.getElementById("Assessment_Date").value
+        };
+
+        fetch("add_grade.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(result => {
+            alert(result.message);
+            document.getElementById("gradeForm").reset();
+            document.getElementById("studentId").value = "";
+            loadRecords();
+        })
+        .catch(err => {
+            alert("Error adding grade.");
+            console.error(err);
+        });
+    });
+
+    document.getElementById("studentSearch").addEventListener("input", function () {
+        const query = this.value.trim();
+        if (query.length < 2) return;
+
+        fetch("/php/search_students.php?q=" + encodeURIComponent(query))
+            .then(res => res.json())
+            .then(data => {
+                const resultsList = document.getElementById("searchResults");
+                resultsList.innerHTML = "";
+
+                data.forEach(student => {
+                    const li = document.createElement("li");
+                    li.textContent = `${student.First_name} ${student.Last_Name} (ID: ${student.ID})`;
+                    li.style.cursor = "pointer";
+                    li.onclick = () => {
+                        document.getElementById("studentId").value = student.ID;
+                        document.getElementById("studentSearch").value = `${student.First_name} ${student.Last_Name}`;
+                        resultsList.innerHTML = "";
+                    };
+                    resultsList.appendChild(li);
+                });
+            });
+    });
+
+    function loadRecords() {
+    fetch("get_grades.php", { credentials: "include" })
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.querySelector("#recordsTable tbody");
+            tbody.innerHTML = "";
+
+            if (data.records && Array.isArray(data.records)) {
+                data.records.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${row.ID}</td>
+                        <td>${row.Student_ID}</td>
+                        <td>${row.First_name} ${row.Last_name}</td>  <!-- Display student name -->
+                        <td>${row.Grade}</td>
+                        <td>${row.Assignment}</td>
+                        <td>${row.Assessment_Date}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        });
+}
+
+
+    window.onload = loadRecords;
+</script>
+
 </body>
 </html>

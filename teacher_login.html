@@ -79,6 +79,48 @@
         <div id="errorMessage"></div>
     </div>
 
-    <script src="/teacher_login.js"></script>
+    <script>document.getElementById("teacherLoginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch("/php/teacher_login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include", // Important for PHP session
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = "/teachers/teacher_home.php";
+        } else {
+            document.getElementById("errorMessage").innerText = data.message;
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("errorMessage").innerText = "Something went wrong.";
+    });
+});</script>
+<script>fetch('/php/teacher_login.php', {
+  method: 'POST',
+  body: new FormData(document.getElementById('loginForm'))
+})
+.then(response => response.json())
+.then(data => {
+  if (data.success === false && data.message === "Invalid username or password.") {
+    alert("Invalid Username or Password");
+  } else {
+    // Handle success (e.g., redirect)
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+});
+</script>
 </body>
 </html>

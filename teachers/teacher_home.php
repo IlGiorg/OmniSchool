@@ -1,39 +1,8 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['admin'])) {
-    http_response_code(401);
-    echo "<!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>401 Unauthorized</title>
-        <meta http-equiv='refresh' content='0;url=/technical/error/401-6.html'>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f8d7da;
-                color: #721c24;
-                text-align: center;
-                padding-top: 100px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>401 Unauthorized</h1>
-        <p>You are not authorized to view this page. Redirecting...</p>
-    </body>
-    </html>";
-    exit;
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Admin Panel</title>
+    <title>Teacher Dashboard</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -110,26 +79,25 @@ if (!isset($_SESSION['admin'])) {
 </head>
 <body>
 <div class="dashboard">
-    <h1>Admin Panel</h1>
+    <h1>Teacher Dashboard</h1>
 
     <div class="button-group">
-    <button onclick="openWindow('students/createstudent.html')">Create Student</button>
-    <button onclick="openWindow('students/editstudent.php')">Edit Student</button>
-    <button onclick="openWindow('teachers/newteacher.php')">Create Teacher</button>
-    <button onclick="openWindow('teachers/editteacher.php')">Edit Teacher</button>
-    <button onclick="openWindow('sqlexecute.php')">SQL Executor</button>
-    <br>
-    <button class="logout" onclick="window.location.href='/logout.php'">Logout</button>
-</div>
+        <button onclick="openwindow('attendance/attendance_landing.php')">Attendance</button>
+        <button onclick="openwindow('conduct/manage.html')">Conduct</button>
+        <button onclick="openwindow('grades/index.html')">Grades</button>
+        <button onclick="openwindow('homework/assignhw.php')">Homework</button>
+        <button onclick="openwindow('studentsdb/studentsdb.php')">Students Database</button>
+        <button onclick="window.open('adminlogon/admin_login.html')">Administration</button>
+        <br>
+        <button class="logout" onclick="window.href=('/logout.php')">Logout</button>
+    </div>
 
+</div>
 <script>
-function openWindow(url) {
-    window.open(url, '_blank', 'width=1000,height=800,toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
-}
+    function openwindow(url) {
+        const uniqueParam = new Date().getTime();  // This creates a unique value based on the current timestamp
+        window.open(url + '?v=' + uniqueParam, '_blank', 'width=1000,height=800,toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+    }
 </script>
-
-
-
-</div>
 </body>
 </html>

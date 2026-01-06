@@ -5,7 +5,7 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-$pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+$pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 
@@ -14,16 +14,19 @@ $error = "";
 $students = [];
 $editingStudent = null;
 
+// Load all classes for dropdown
+$classes = $pdo->query("SELECT ClassID, Year, Form FROM classes ORDER BY Year, Form")->fetchAll(PDO::FETCH_ASSOC);
+
 // Handle delete
 if (isset($_POST['delete']) && isset($_POST['ID'])) {
-    $stmt = $pdo->prepare("DELETE FROM Students WHERE ID = ?");
+    $stmt = $pdo->prepare("DELETE FROM students WHERE ID = ?");
     $stmt->execute([$_POST['ID']]);
     $success = "✅ Student deleted successfully.";
 }
 
 // Handle update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-    $stmt = $pdo->prepare("UPDATE Students SET First_name=?, Last_Name=?, Username=?, Password=?, Academic_House=?, DOB=? WHERE ID=?");
+    $stmt = $pdo->prepare("UPDATE students SET First_name=?, Last_Name=?, Username=?, Password=?, Academic_House=?, DOB=?, ClassID=? WHERE ID=?");
     $stmt->execute([
         $_POST['First_Name'],
         $_POST['Last_Name'],
@@ -31,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         $_POST['Password'],
         $_POST['Academic_House'],
         $_POST['DOB'],
+        $_POST['ClassID'],
         $_POST['ID']
     ]);
     $success = "✅ Student updated successfully!";
@@ -39,14 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 // Load student list after search
 if (isset($_GET['search'])) {
     $searchQuery = "%" . $_GET['search'] . "%";
-    $stmt = $pdo->prepare("SELECT * FROM Students WHERE First_name LIKE ? OR Last_Name LIKE ? OR Username LIKE ?");
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE First_name LIKE ? OR Last_Name LIKE ? OR Username LIKE ?");
     $stmt->execute([$searchQuery, $searchQuery, $searchQuery]);
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Load student details for editing
 if (isset($_POST['edit']) && isset($_POST['ID'])) {
-    $stmt = $pdo->prepare("SELECT * FROM Students WHERE ID = ?");
+    $stmt = $pdo->prepare("SELECT * FROM students WHERE ID = ?");
     $stmt->execute([$_POST['ID']]);
     $editingStudent = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -128,6 +132,11 @@ if (isset($_POST['edit']) && isset($_POST['ID'])) {
         .search-group select {
             flex: 1;
         }
+        label {
+            font-weight: 600;
+            margin-top: 15px;
+            display: block;
+        }
     </style>
     <script>
         let searchTimeout;
@@ -157,7 +166,7 @@ if (isset($_POST['edit']) && isset($_POST['ID'])) {
         <?php if (!empty($students)): ?>
             <form method="POST">
                 <div class="search-group">
-                    <select id="studentSelect" name="ID">
+                    <select id="studentSelect" name="ID" required>
                         <?php foreach ($students as $student): ?>
                             <option value="<?= $student['ID'] ?>"><?= htmlspecialchars($student['First_name'] . ' ' . $student['Last_Name']) ?> (<?= htmlspecialchars($student['Username']) ?>)</option>
                         <?php endforeach; ?>
@@ -172,15 +181,35 @@ if (isset($_POST['edit']) && isset($_POST['ID'])) {
         <?php if ($editingStudent): ?>
             <form method="POST">
                 <input type="hidden" name="ID" value="<?= htmlspecialchars($editingStudent['ID']) ?>">
-                <input type="text" name="First_Name" placeholder="First Name" value="<?= htmlspecialchars($editingStudent['First_name']) ?>" required>
-                <input type="text" name="Last_Name" placeholder="Last Name" value="<?= htmlspecialchars($editingStudent['Last_Name']) ?>" required>
-                <input type="text" name="Username" placeholder="Username" value="<?= htmlspecialchars($editingStudent['Username']) ?>" required>
-                <input type="text" name="Password" placeholder="Password" value="<?= htmlspecialchars($editingStudent['Password']) ?>" required>
-                <input type="text" name="Academic_House" placeholder="Academic House" value="<?= htmlspecialchars($editingStudent['Academic_House']) ?>">
-                <input type="date" name="DOB" value="<?= htmlspecialchars($editingStudent['DOB']) ?>">
-                    <button type="submit" name="update">Update Student</button>
-                    <button type="submit" name="delete" class="delete" onclick="return confirm('Are you sure you want to delete this student?');">Delete Student</button>
-                </div>
+                <label for="First_Name">First Name</label>
+                <input type="text" id="First_Name" name="First_Name" placeholder="First Name" value="<?= htmlspecialchars($editingStudent['First_name']) ?>" required>
+
+                <label for="Last_Name">Last Name</label>
+                <input type="text" id="Last_Name" name="Last_Name" placeholder="Last Name" value="<?= htmlspecialchars($editingStudent['Last_Name']) ?>" required>
+
+                <label for="Username">Username</label>
+                <input type="text" id="Username" name="Username" placeholder="Username" value="<?= htmlspecialchars($editingStudent['Username']) ?>" required>
+
+                <label for="Password">Password</label>
+                <input type="text" id="Password" name="Password" placeholder="Password" value="<?= htmlspecialchars($editingStudent['Password']) ?>" required>
+
+                <label for="Academic_House">Academic House</label>
+                <input type="text" id="Academic_House" name="Academic_House" placeholder="Academic House" value="<?= htmlspecialchars($editingStudent['Academic_House']) ?>">
+
+                <label for="DOB">Date of Birth</label>
+                <input type="date" id="DOB" name="DOB" value="<?= htmlspecialchars($editingStudent['DOB']) ?>">
+
+                <label for="ClassID">Class</label>
+                <select name="ClassID" id="ClassID" required>
+                    <?php foreach ($classes as $class): ?>
+                        <option value="<?= $class['ClassID'] ?>" <?= ($editingStudent['ClassID'] == $class['ClassID']) ? 'selected' : '' ?>>
+                            Year <?= htmlspecialchars($class['Year']) ?><?= htmlspecialchars($class['Form']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <button type="submit" name="update">Update Student</button>
+                <button type="submit" name="delete" class="delete" onclick="return confirm('Are you sure you want to delete this student?');">Delete Student</button>
             </form>
         <?php endif; ?>
 
