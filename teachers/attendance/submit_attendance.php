@@ -1,27 +1,32 @@
 <?php
-// --- Begin DB connection ---
-$host = "sql109.infinityfree.com";
-$dbname = "if0_38817814_omnischool";
-$user = "if0_38817814";
-$pass = "OMNISoftware25";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$conn = new mysqli($host, $user, $pass, $dbname);
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
-// --- End DB connection ---
+// --- PDO DB connection ---
+$pdo = new PDO(
+    "mysql:host=127.0.0.1;port=3307;dbname=omnischool;charset=utf8mb4",
+    "root",
+    "",
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["status"], $_POST["classID"], $_POST["teacher_username"])) {
+if (
+    $_SERVER["REQUEST_METHOD"] === "POST" &&
+    isset($_POST["status"], $_POST["classID"], $_POST["teacher_username"])
+) {
     $classID = (int)$_POST["classID"];
     $statuses = $_POST["status"];
     $teacherUsername = trim($_POST["teacher_username"]);
 
-    // Check if teacher username exists
-    $teacherStmt = $conn->prepare("SELECT TeachID FROM teachers WHERE Username = ?");
-    $teacherStmt->bind_param("s", $teacherUsername);
-    $teacherStmt->execute();
-    $teacherResult = $teacherStmt->get_result();
+    // --- Validate teacher ---
+    $teacherStmt = $pdo->prepare(
+        "SELECT TeachID FROM teachers WHERE Username = ?"
+    );
+    $teacherStmt->execute([$teacherUsername]);
+    $teacherRow = $teacherStmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($teacherResult->num_rows === 0) {
-        // Invalid teacher username
+    if (!$teacherRow) {
         ?>
         <!DOCTYPE html>
         <html>
@@ -44,12 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["status"], $_POST["cla
                     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                     text-align: center;
                 }
-                .message-box h2 {
-                    color: #d32f2f;
-                }
-                .message-box p {
-                    color: #444;
-                }
+                .message-box h2 { color: #d32f2f; }
             </style>
         </head>
         <body>
@@ -64,21 +64,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["status"], $_POST["cla
         exit;
     }
 
-    $teacherRow = $teacherResult->fetch_assoc();
     $teacherID = (int)$teacherRow["TeachID"];
 
-    // Insert attendance
-    $stmt = $conn->prepare("INSERT INTO attendance (StudentID, Status, Date, ClassID, Recorded_By) VALUES (?, ?, CURDATE(), ?, ?)");
+    // --- Insert attendance ---
+    $insertStmt = $pdo->prepare(
+        "INSERT INTO attendance (StudentID, Status, Date, ClassID, Recorded_By)
+         VALUES (?, ?, CURDATE(), ?, ?)"
+    );
 
     foreach ($statuses as $studentID => $status) {
-        $studentID = (int)$studentID;
-        $status = $conn->real_escape_string($status);
-        $stmt->bind_param("isii", $studentID, $status, $classID, $teacherID);
-        $stmt->execute();
+        $insertStmt->execute([
+            (int)$studentID,
+            $status,
+            $classID,
+            $teacherID
+        ]);
     }
-
-    $stmt->close();
-    $conn->close();
     ?>
     <!DOCTYPE html>
     <html>
@@ -102,12 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["status"], $_POST["cla
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 text-align: center;
             }
-            .message-box h2 {
-                color: #2e7d32;
-            }
-            .message-box p {
-                color: #444;
-            }
+            .message-box h2 { color: #2e7d32; }
         </style>
     </head>
     <body>

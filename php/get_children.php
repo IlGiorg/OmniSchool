@@ -14,25 +14,23 @@ try {
 
     $username = $_SESSION['username'];
 
-    // Get student
-    $stmt = $pdo->prepare("SELECT ID, First_name FROM students WHERE Username = ?");
+    // Get all children
+    $stmt = $pdo->prepare("SELECT Child1, Child2, Child3 FROM parents WHERE Username = ?");
     $stmt->execute([$username]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$student) {
-        echo json_encode(["success" => false, "message" => "Student not found"]);
+        echo json_encode(["success" => false, "message" => "Children not found"]);
         exit;
     }
 
-    // Get grades
-    $stmt = $pdo->prepare("SELECT Grade, Assignment, Assessment_Date FROM grades WHERE Student_ID = ?");
-    $stmt->execute([$student['ID']]);
-    $grades = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     echo json_encode([
         "success" => true,
-        "name" => $student["First_name"],
-        "grades" => $grades
+        "children" => [
+            $student["Child1"],
+            $student["Child2"],
+            $student["Child3"]
+        ]
     ]);
 
 } catch (PDOException $e) {

@@ -1,8 +1,6 @@
 <?php
 session_start();
-header('Content-Type: application/json');
-
-if (!isset($_SESSION['teacher'])) {
+header('Content-Type: application/json');if (!isset($_SESSION['teacher'])) {
     echo json_encode(["success" => false]);
     exit;
 }

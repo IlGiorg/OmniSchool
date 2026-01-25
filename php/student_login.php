@@ -19,10 +19,10 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 // DB config
-$host = 'sql109.infinityfree.com';
-$db = 'if0_38817814_omnischool'; // Replace XXX
-$user = 'if0_38817814';
-$pass = 'OMNISoftware25';
+$host = '127.0.0.1:3307';
+$db = 'omnischool'; // Replace XXX
+$user = 'root';
+$pass = '';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

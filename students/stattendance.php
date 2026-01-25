@@ -10,14 +10,14 @@ $attendanceRecords = [];
 $studentName = "";
 
 try {
-    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
+    $pdo = new PDO("mysql:host=127.0.0.1:3307;dbname=omnischool;charset=utf8mb4", "root", "", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
     $username = $_SESSION['username'];
 
     // Get student info
-    $stmt = $pdo->prepare("SELECT ID, First_name FROM students WHERE Username = ?");
+    $stmt = $pdo->prepare("SELECT ID, First_name FROM students WHERE username = ?");
     $stmt->execute([$username]);
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,7 +30,7 @@ try {
 
     // Get attendance records
     $stmt = $pdo->prepare("
-        SELECT a.Date, a.Status, t.Username AS Marked_By
+        SELECT a.Date, a.Status, t.username AS Marked_By
         FROM attendance a
         JOIN teachers t ON a.Recorded_By = t.TeachID
         WHERE a.StudentID = ?

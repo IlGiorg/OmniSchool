@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OmniSchool</title>
     <link rel="stylesheet" href="styles.css">
@@ -44,7 +44,7 @@
             <a href="teacher_login.html">
                 <img src="img/omniteacher.png" alt="Teachers" class="button-img">
             </a>
-            <a href="parent_login.html">
+            <a href="parents/logon.php">
                 <img src="img/omniparent.png" alt="Parents" class="button-img">
             </a>
         </div>

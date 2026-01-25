@@ -115,13 +115,9 @@
         <button onclick="window.close()">Close</button> <!-- Close button here -->
     </div>
 
-    <script>// Simulating a "logged-in" user — in a real app, use a session
-const loggedInUsername = localStorage.getItem("username") || "PSmith";
-
+<script>
 fetch("/php/get_student_conduct.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: loggedInUsername })
+    method: "POST"
 })
 .then(response => response.json())
 .then(data => {
@@ -129,9 +125,15 @@ fetch("/php/get_student_conduct.php", {
         document.getElementById("greeting").textContent = "Hello, " + data.name;
 
         const tableBody = document.querySelector("#consequenceTable tbody");
-        data.consequences.forEach(row => {
+        tableBody.innerHTML = "";
+
+        data.conduct.forEach(row => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
+            tr.innerHTML = `
+                <td>${row.Consequence_Type}</td>
+                <td>${row.Reason}</td>
+                <td>${row.Date_Assigned}</td>
+            `;
             tableBody.appendChild(tr);
         });
     } else {
@@ -139,5 +141,6 @@ fetch("/php/get_student_conduct.php", {
     }
 });
 </script>
+
 </body>
 </html>

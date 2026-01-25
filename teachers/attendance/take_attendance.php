@@ -1,11 +1,13 @@
 <?php
 // --- DB Connection ---
-$host = "sql109.infinityfree.com";
-$dbname = "if0_38817814_omnischool";
-$user = "if0_38817814";
-$pass = "OMNISoftware25";
+// DB config
+$host = '127.0.0.1:3307';
+$db = 'omnischool'; // Replace XXX
+$user = 'root';
+$pass = '';
+$charset = 'utf8mb4';
 
-$conn = new mysqli($host, $user, $pass, $dbname);
+$conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 
 $classID = isset($_GET['class']) ? (int)$_GET['class'] : 0;

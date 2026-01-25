@@ -1,3 +1,32 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    http_response_code(401);
+    echo "<!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>401 Unauthorized</title>
+        <meta http-equiv='refresh' content='0;url=/technical/error/401-6.html'>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8d7da;
+                color: #721c24;
+                text-align: center;
+                padding-top: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>401 Unauthorized</h1>
+        <p>You are not authorized to view this page. Redirecting...</p>
+    </body>
+    </html>";
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

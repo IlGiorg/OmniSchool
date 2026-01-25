@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 try {
-    $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
+    $pdo = new PDO("mysql:host=127.0.0.1:3307;dbname=omnischool;charset=utf8mb4", "root", "", [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
@@ -24,15 +24,15 @@ try {
         exit;
     }
 
-    // Get grades
+    // Get conduct records
     $stmt = $pdo->prepare("SELECT Consequence_Type, Reason, Date_Assigned FROM conduct WHERE Student_ID = ?");
     $stmt->execute([$student['ID']]);
-    $grades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $conduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([
         "success" => true,
         "name" => $student["First_name"],
-        "grades" => $grades
+        "conduct" => $conduct
     ]);
 
 } catch (PDOException $e) {

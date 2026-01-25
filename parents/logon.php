@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login</title>
+    <title>Parents Login</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ebd78f, #ff7dc4);
+            background: linear-gradient(135deg, #f53737ff, #a51263ff);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -30,6 +31,11 @@
             text-align: center;
             margin-bottom: 25px;
             color: #1976d2;
+        }
+        p {
+            text-align: center;
+            margin-bottom: 12px;
+
         }
 
         form {
@@ -70,7 +76,8 @@
 </head>
 <body>
     <div class="login-box">
-        <h1>Student Login</h1>
+        <h1>Parent Portal Login</h1>
+        <p>Please enter your credentials below.</p>   
         <form id="studentLoginForm">
             <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
@@ -80,31 +87,32 @@
     </div>
 
     <script>
-        document.getElementById("studentLoginForm").addEventListener("submit", function(e) {
+        document.getElementById("studentLoginForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            fetch("/php/student_login.php", {
+            fetch("/php/parent_login.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({ username, password })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = "students/student_home.html";
-                } else {
-                    alert(data.message || "Error 603: Invalid username or password.");
-                }
-            })
-            .catch(err => {
-                console.error("Error:", err);
-                alert("Error 700: Something went wrong. Please try again later.");
-            });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/parents/authok";
+                    } else {
+                        alert(data.message || "Error 603: Invalid username or password.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("Error 700: Something went wrong. Please try again later.");
+                });
         });
     </script>
 </body>
+
 </html>
