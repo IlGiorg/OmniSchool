@@ -1,19 +1,16 @@
 <?php
-// Connessione al database
-$host = 'localhost';
-$db = 'omni';
-$user = 'your_db_user';
-$pass = 'your_db_password';
-
-$conn = new mysqli($host, $user, $pass, $db);
+require_once '../db/db.php';
+ $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
 
-// Username dello studente (può venire da sessione o parametro GET/POST)
-$username = $_GET['username']; // Assicurati di sanitizzare se viene da input utente
 
-// Query per ottenere la classe dello studente
+$username = $_GET['username']; 
+
+
 $stmt = $conn->prepare("
     SELECT Class_ID 
     FROM students 
@@ -31,7 +28,6 @@ if ($result->num_rows === 0) {
 $row = $result->fetch_assoc();
 $class_id = $row['Class_ID'];
 
-// Ora otteniamo i compiti per quella classe
 $stmt = $conn->prepare("
     SELECT subject, title, due_date 
     FROM homework 
@@ -42,7 +38,6 @@ $stmt->bind_param("s", $class_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Mostriamo i compiti
 if ($result->num_rows > 0) {
     echo "<h2>Compiti per la tua classe</h2>";
     echo "<ul>";

@@ -7,12 +7,9 @@ if (!isset($_SESSION['username'])) {
 }
 
 try {
-    $pdo = new PDO(
-        "mysql:host=127.0.0.1:3307;dbname=omnischool;charset=utf8mb4",
-        "root",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+     $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
     // Get parent children IDs
     $stmt = $pdo->prepare("SELECT Child1, Child2, Child3 FROM parents WHERE Username = ?");

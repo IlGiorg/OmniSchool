@@ -19,18 +19,13 @@ $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
 // DB config
-$host = '127.0.0.1:3307';
-$db = 'omnischool'; // Replace XXX
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+require_once '../db/db.php';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
 
     $stmt = $pdo->prepare("SELECT * FROM students WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]);
