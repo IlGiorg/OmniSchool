@@ -5,9 +5,14 @@ if (!isset($_SESSION['admin'])) {
     exit;
 }
 
-$pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
+require_once '../db/db.php';
+
+try {
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);}catch (PDOException $e) {
+    die("Database connection failed: " . htmlspecialchars($e->getMessage()));
+}
 
 $success = "";
 $error = "";

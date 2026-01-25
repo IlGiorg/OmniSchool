@@ -7,8 +7,10 @@ if (!isset($_SESSION['teacher'])) {
     exit;
 }
 
+require_once '../db/db.php';
+
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=OSMAP;charset=utf8mb4", "root", "root", [
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 

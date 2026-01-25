@@ -7,18 +7,12 @@ error_reporting(E_ALL);
 session_start();
 
 // Database connection details
-$host = 'sql109.infinityfree.com';
-$db = 'if0_38817814_omnischool';
-$user = 'if0_38817814';
-$pass = 'OMNISoftware25';
-$charset = 'utf8mb4';
+require_once '../db/db.php';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-// Create PDO instance
 try {
-    $pdo = new PDO($dsn, $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 } catch (PDOException $e) {
     die("Could not connect to the database $db: " . $e->getMessage());
 }

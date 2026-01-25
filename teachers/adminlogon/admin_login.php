@@ -7,17 +7,10 @@ $data = json_decode(file_get_contents("php://input"), true);
 $username = $data['username'] ?? '';
 $password = $data['password'] ?? '';
 
-// DB connection
-$host = '127.0.0.1:3307';
-$db = 'omnischool';
-$user = 'root';
-$pass = ''; // Change if different in MAMP
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+require_once '../db/db.php';
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, [
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 

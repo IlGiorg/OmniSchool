@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-// Uncomment this if you want error messages to show during development
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
 
 // --- Check if user is logged in as admin ---
 if (!isset($_SESSION['admin'])) {
@@ -19,15 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Password = $_POST['Password'] ?? '';
 
     if (!empty($Username) && !empty($Password)) {
-        try {
-            $pdo = new PDO(
-                "mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4",
-                "if0_38817814",
-                "OMNISoftware25",
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-                ]
-            );
+require_once '../db/db.php';
+
+try {
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
             $stmt = $pdo->prepare("INSERT INTO teachers (Username, Password) VALUES (?, ?)");
             $stmt->execute([$Username, $Password]);

@@ -1,24 +1,21 @@
 <?php
 session_start();
 
-// Optional: only allow logged-in teachers/parents
-// if (!isset($_SESSION['username'])) {
-//     header("Location: /");
-//     exit;
-// }
+if (!isset($_SESSION['username'])) {
+     header("Location: /");
+     exit;
+ }
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once '../db/db.php';
+
 try {
-    // --- PDO DB connection ---
-    $pdo = new PDO(
-        "mysql:host=127.0.0.1;port=3307;dbname=omnischool;charset=utf8mb4",
-        "root",
-        "",
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
     // Fetch all classes
     $stmt = $pdo->query("SELECT ClassID, Year, Form FROM classes ORDER BY Year, Form");

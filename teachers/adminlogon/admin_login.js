@@ -14,8 +14,8 @@ document.getElementById("studentLoginForm").addEventListener("submit", function 
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            localStorage.setItem("username", username); // ✅ Only set if login worked
-            window.location.href = "/teachers/adminlogon/adminlogin=200/admin_home.html"; // ✅ Only redirect on success
+            localStorage.setItem("username", username); 
+            window.location.href = "/teachers/adminlogon/adminlogin=200/admin_home.html"; 
         } else {
             document.getElementById("errorMessage").innerText = data.message;
         }

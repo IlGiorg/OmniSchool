@@ -11,10 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($description) || empty($duedate) || empty($class) || empty($assignedby)) {
         $errorMessage = "❌ All fields are required.";
     } else {
-        try {
-            $pdo = new PDO("mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4", "if0_38817814", "OMNISoftware25", [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
+        require_once '../db/db.php';
+
+try {
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 
             $stmt = $pdo->prepare("INSERT INTO homework (description, duedate, class, assignedby) VALUES (?, ?, ?, ?)");
             $stmt->execute([$description, $duedate, $class, $assignedby]);

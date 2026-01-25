@@ -1,9 +1,9 @@
 <?php
 // db.php
-$host = 'sql109.infinityfree.com';
-$user = 'if0_38817814';
-$password = 'OMNISoftware25';
-$dbname = 'if0_38817814_omnischool';
+$host = '127.0.0.1';
+$user = 'root';
+$password = '';
+$dbname = 'omnischool';
 
 $conn = new mysqli($host, $user, $password, $dbname);
 if ($conn->connect_error) {

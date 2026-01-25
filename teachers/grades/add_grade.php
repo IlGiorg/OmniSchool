@@ -16,9 +16,10 @@ $type = $data['type'] ?? null;  // Grade Type (HP, L0, etc.)
 $reason = $data['reason'] ?? '';  // Assignment reason
 $assessmentDate = $data['Assessment_Date'] ?? '';  // Assessment date
 
+    require_once '../db/db.php';
+
 try {
-    // Set up the database connection
-    $pdo = new PDO("mysql:host=127.0.0.1:3307;dbname=omnischool;charset=utf8mb4", "root", "", [
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 

@@ -7,10 +7,10 @@ if (!isset($_SESSION['teacher'])) {
     echo json_encode(["success" => false, "message" => "Unauthorized"]);
     exit;
 }
+require_once '../db/db.php';
 
-try {
-    // Database connection
-    $pdo = new PDO("mysql:host=127.0.0.1:3307;dbname=omnischool;charset=utf8mb4", "root", "", [
+try { // Set up the database connection
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 

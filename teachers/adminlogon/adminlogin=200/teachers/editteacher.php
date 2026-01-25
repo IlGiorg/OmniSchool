@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Uncomment this during development if needed
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
-// --- Check if user is logged in as admin ---
 if (!isset($_SESSION['admin'])) {
     die("Unauthorized access.");
 }
@@ -18,16 +12,12 @@ $teacher = [
 ];
 
 // --- Database connection ---
+require_once '../db/db.php';
+
 try {
-    $pdo = new PDO(
-        "mysql:host=sql109.infinityfree.com;dbname=if0_38817814_omnischool;charset=utf8mb4",
-        "if0_38817814",
-        "OMNISoftware25",
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]
-    );
-} catch (PDOException $e) {
+    $pdo = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8mb4", $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);}catch (PDOException $e) {
     die("Database connection failed: " . htmlspecialchars($e->getMessage()));
 }
 
