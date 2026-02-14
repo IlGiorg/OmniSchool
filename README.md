@@ -5,6 +5,8 @@
 ![Stars](https://img.shields.io/github/stars/IlGiorg/OmniSchool)
 ![Contributors](https://img.shields.io/github/contributors/IlGiorg/OmniSchool)
 
+> [!WARNING]
+> Right now I'm going through a complete refactor and overhaul, which is why the repository might be empty, completely broken or senseless at times. 
 ## A School's All-in-One Solution
 
 ### Welcome to OmniSchool!
