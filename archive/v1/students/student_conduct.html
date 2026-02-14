@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Conduct</title>
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: #fff;
+            font-weight: normal;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            display: block;
+            margin: 30px auto 0 auto;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #e53935;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c62828;
+        }
+
+        
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="greeting">Hello, </h1>
+
+        <h2>Your Consequences</h2>
+        <table id="consequenceTable">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Reason</th>
+                    <th>Date Assigned</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Filled by JS -->
+            </tbody>
+        </table>
+
+        <button onclick="window.close()">Close</button> <!-- Close button here -->
+    </div>
+
+    <script>// Simulating a "logged-in" user — in a real app, use a session
+const loggedInUsername = localStorage.getItem("username") || "PSmith";
+
+fetch("/php/get_student_conduct.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: loggedInUsername })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        document.getElementById("greeting").textContent = "Hello, " + data.name;
+
+        const tableBody = document.querySelector("#consequenceTable tbody");
+        data.consequences.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${row.Consequence_Type}</td><td>${row.Reason}</td><td>${row.Date_Assigned}</td>`;
+            tableBody.appendChild(tr);
+        });
+    } else {
+        document.body.innerHTML = `<p>Error: ${data.message}</p>`;
+    }
+});
+</script>
+</body>
+</html>
