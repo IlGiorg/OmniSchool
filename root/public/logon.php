@@ -20,7 +20,7 @@ if (isset($_SESSION['role'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require_once '../controllers/app/AuthWizard.php';
+    require_once '../controllers/app/AuthWand.php';
     login(); // call your controller function
 }
 

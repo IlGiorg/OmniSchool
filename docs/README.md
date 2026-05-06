@@ -87,3 +87,4 @@ Check out [The To Do List](TODO.md) and the [Issues Tab](https://github.com/IlGi
 ## 🌍 Live Demo
 
 Explore the project: [omnischool.rf.gd](https://omnischool.rf.gd)
+

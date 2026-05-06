@@ -1,8 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
-    http_response_code(401);
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'teacher') {    http_response_code(401);
     echo "<!DOCTYPE html>
     <html lang='en'>
     <head>
@@ -111,7 +110,7 @@ if (!isset($_SESSION['username'])) {
     <h1>Teacher Dashboard</h1>
 
     <div class="button-group">
-        <button onclick="openwindow('attendance/attendance_landing.php')">Attendance</button>
+        <button onclick="openwindow('AttendanceWizard.php')">Attendance</button>
         <button onclick="openwindow('conduct/manage.html')">Conduct</button>
         <button onclick="openwindow('grades/index.html')">Grades</button>
         <button onclick="openwindow('homework/assignhw.php')">Homework</button>
