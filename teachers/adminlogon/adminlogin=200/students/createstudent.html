@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Student</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #2c88d9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2172b8;
+    }
+  </style>
+</head>
+<body>
+  <form id="addstudent">
+    <h1>Create a New Student</h1>
+    <label for="stname">Name</label>
+    <input id="stname" type="text" placeholder="Student's name" required>
+
+    <label for="stsurname">Surname</label>
+    <input id="stsurname" type="text" placeholder="Student's surname" required>
+
+    <label for="stuser">Username</label>
+    <input id="stuser" type="text" placeholder="Username" required>
+
+    <label for="stpsw">Password</label>
+    <input id="stpsw" type="text" placeholder="Password" required>
+
+    <label for="house">Academic House</label>
+    <select id="house" required>
+      <option value="Johnson">Johnson</option>
+      <option value="Chaplin">Chaplin</option>
+      <option value="Marconi">Marconi</option>
+      <option value="Kahlo">Kahlo</option>
+    </select>
+
+    <label for="dob">Date of Birth</label>
+    <input id="dob" type="date" required>
+
+    <button type="submit">Add Student</button>
+  </form>
+
+  <script>
+    document.getElementById("addstudent").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = {
+        First_Name: document.getElementById("stname").value,
+        Last_Name: document.getElementById("stsurname").value,
+        Username: document.getElementById("stuser").value,
+        Password: document.getElementById("stpsw").value,
+        Academic_House: document.getElementById("house").value,
+        DOB: document.getElementById("dob").value,
+      };
+
+      fetch("/teachers/adminlogon/adminlogin=200/students/add_student.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            alert("Student added successfully!");
+            document.getElementById("addstudent").reset();
+          } else {
+            alert("Failed to add student: " + res.message);
+          }
+        })
+        .catch(err => {
+          alert("Error adding student.");
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>

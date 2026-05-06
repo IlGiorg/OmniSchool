@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Teacher Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .dashboard {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .logout {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+        }
+
+        .logout:hover {
+            background-color: #c0392b;
+        }
+
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .admin-link a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <h1>Teacher Dashboard</h1>
+
+    <div class="button-group">
+        <button onclick="openwindow('attendance/attendance_landing.html')">Attendance</button>
+        <button onclick="openwindow('conduct/manage.html')">Conduct</button>
+        <button onclick="openwindow('grades/index.html')">Grades</button>
+        <button onclick="openwindow('homework/homework.html')">Homework</button>
+        <button onclick="openwindow('studentsdb/studentsdb.php')">Students Database</button>
+        <button onclick="window.open('adminlogon/admin_login.html')">Administration</button>
+        <br>
+        <button class="logout" onclick="window.href=('/logout.php')">Logout</button>
+    </div>
+
+</div>
+<script>
+    function openwindow(url) {
+        const uniqueParam = new Date().getTime();  // This creates a unique value based on the current timestamp
+        window.open(url + '?v=' + uniqueParam, '_blank', 'width=1000,height=800,toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes');
+    }
+</script>
+</body>
+</html>

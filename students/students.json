@@ -1,0 +1,20 @@
+[
+    {
+        "name": "John",
+        "surname": "Doe",
+        "username": "johndoe",
+        "password": "password123",
+        "homework": [],
+        "classId": 1,
+        "consequences": []
+    },
+    {
+        "name": "Jane",
+        "surname": "Smith",
+        "username": "janesmith",
+        "password": "password456",
+        "homework": [],
+        "classId": 2,
+        "consequences": []
+    }
+]

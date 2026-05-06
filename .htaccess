@@ -7,4 +7,3 @@ ErrorDocument 405 /errors/error/405.html
 ErrorDocument 500 /errors/error/500.html
 ErrorDocument 501 /errors/error/501.html
 ErrorDocument 502 /errors/error/502.html
-
